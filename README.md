@@ -49,3 +49,7 @@ module "associate_vpc_with_zone" {
 Terraform version
 -----------------
 Terraform version 0.11.3 has been used when creating the module, however many previous versions should work also but have not been tested.
+
+TODO
+----
+- [ ] Add variable region, current implementation relies on aws config having a default set to the value required.
