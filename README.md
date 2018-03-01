@@ -40,6 +40,9 @@ module "associate_vpc_with_zone" {
   role            = "TF_Role"
   cmd             = "aws route53 associate-vpc-with-hosted-zone ${local.cli_flags}"
   destroy_cmd     = "aws route53 disassociate-vpc-from-hosted-zone ${local.cli_flags}"
+
+  # Require that the above resource is created first 
+  dependency_ids  = ["${module.create_vpc_association_authorization.id}"] 
 }
 ```
 
