@@ -10,6 +10,7 @@ variable "account_id" {
 }
 variable "role" {
   description = "The role to assume in order to run the cli command."
+  default = "0"
 }
 variable "dependency_ids" {
   description = "IDs or ARNs of any resources that are a dependency of the resource created by this module."
@@ -27,12 +28,12 @@ locals {
 resource "null_resource" "cli_resource" {
   provisioner "local-exec" {
     when    = "create"
-    command = "${local.assume_role_cmd} && ${var.cmd}"
+    command = "${var.role == 0 ? "" : "${local.assume_role_cmd} && "}${var.cmd}"
   }
 
   provisioner "local-exec" {
     when    = "destroy"
-    command = "${local.assume_role_cmd} && ${var.destroy_cmd}"
+    command = "${var.role == 0 ? "" : "${local.assume_role_cmd} && "}${var.destroy_cmd}"
   }
 
   # By depending on the null_resource, the cli resource effectively depends on the existance
@@ -47,6 +48,6 @@ resource "null_resource" "dependencies" {
 }
 
 output "id" {
-  description = "The ID of the null_resource used to provison the resource via cli. Useful for creating dependecies between cli resources"
+  description = "The ID of the null_resource used to provison the resource via cli. Useful for creating dependencies between cli resources"
   value = "${null_resource.cli_resource.id}"
 }

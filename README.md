@@ -10,14 +10,15 @@ Use Cases
 
 Prerequisites
 -------------
- * Must be using sts assume role as a means to authenticate.
- * The credentials terraform is using to run must resolve to a identity with permissions allowing assuming of the roles the module is configured to use.
+ * Must be using sts assume role as a means to authenticate (where a role is supplied).
+ * The credentials terraform is using to run must resolve to a identity with permissions allowing assuming of the roles the module is configured to use (where a role is supplied).
+ * `cksum`, `grep`, `awk` must be available (as they are on most systems)
 
 Example Usage
 -------------
 This module was created initially to combat the issue with the aws provider for terraform where it is not possible to associate a route53 zone to a VPC in a different account [Issue 617 (aws-provider)](https://github.com/terraform-providers/terraform-provider-aws/issues/617) and [Issue 12465](https://github.com/hashicorp/terraform/issues/12465) for more details.
 
-Use of the CLI circumvents the bug mentioned above and the inclusion of the sts assume role support elieveates some of the pain caused by [Issue 3 (null provider)](https://github.com/terraform-providers/terraform-provider-null/issues/3)
+Use of the CLI circumvents the bug mentioned above and the inclusion of the sts assume role support alleviates some of the pain caused by [Issue 3 (null provider)](https://github.com/terraform-providers/terraform-provider-null/issues/3)
 
 ```hcl
 locals {
