@@ -1,3 +1,5 @@
+#!/bin/bash
+
 if [ "$#" -ne 2 ]
 then
   echo "Usage: . assume_role.sh [account_id] [role]"
