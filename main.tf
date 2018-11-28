@@ -26,7 +26,7 @@ data "aws_caller_identity" "id" {}
 
 locals {
   account_id      = "${var.account_id == 0 ? data.aws_caller_identity.id.account_id : var.account_id}"
-  assume_role_cmd = "source ${path.module}/assume_role.sh ${local.account_id} ${var.role}"
+  assume_role_cmd = "/bin/bash -c 'source ${path.module}/assume_role.sh ${local.account_id} ${var.role}'"
 }
 
 resource "null_resource" "cli_resource" {
