@@ -22,4 +22,3 @@ export AWS_SECRET_ACCESS_KEY=$(echo "${aws_creds}" | grep SecretAccessKey | awk 
 export AWS_SESSION_TOKEN=$(echo "${aws_creds}" | grep SessionToken | awk -F'"' '{print $4}' )
 export AWS_SECURITY_TOKEN=$(echo "${aws_creds}" | grep SessionToken | awk -F'"' '{print $4}' )
 echo "session '$role_session_name' valid for 60 minutes"
-echo "aws creds obtained are: '$aws_creds'"
