@@ -1,8 +1,6 @@
-#!/bin/bash
-
 if [ "$#" -ne 2 ]
 then
-  echo "Usage: . assume_role.sh [account_id] [role]"
+  echo "Usage: source assume_role.sh [account_id] [role]"
   exit 1
 fi
 
