@@ -16,6 +16,11 @@ variable "role" {
   default     = "0"
 }
 
+variable "region" {
+  description = "Region to work in"
+  default     = "0"
+}
+
 variable "dependency_ids" {
   description = "IDs or ARNs of any resources that are a dependency of the resource created by this module."
   type        = "list"
@@ -23,10 +28,12 @@ variable "dependency_ids" {
 }
 
 data "aws_caller_identity" "id" {}
+data "aws_region" "current" {}
 
 locals {
   account_id      = "${var.account_id == 0 ? data.aws_caller_identity.id.account_id : var.account_id}"
-  assume_role_cmd = "source ${path.module}/assume_role.sh ${local.account_id} ${var.role}"
+  region          = "${var.region == 0 ? data.aws_region.current : var.region}"
+  assume_role_cmd = "source ${path.module}/assume_role.sh ${local.account_id} ${var.role} ${var.region}"
 }
 
 resource "null_resource" "cli_resource" {

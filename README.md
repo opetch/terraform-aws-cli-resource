@@ -29,6 +29,7 @@ module "create_vpc_association_authorization" {
   source = "../../cli_resource"
 
   account_id      = "123456789" # Account with the private hosted zone
+  region          = "region-nr" # Region to use.
   role            = "TF_Role"
   cmd             = "aws route53 create-vpc-association-authorization ${local.cli_flags}"
   destroy_cmd     = "aws route53 delete-vpc-association-authorization ${local.cli_flags}"
@@ -38,6 +39,7 @@ module "associate_vpc_with_zone" {
   source = "../../cli_resource"
 
   # Uses the default provider account id if no account id is passed in
+  # Uses the default region to use if region is not passed in
   role            = "TF_Role"
   cmd             = "aws route53 associate-vpc-with-hosted-zone ${local.cli_flags}"
   destroy_cmd     = "aws route53 disassociate-vpc-from-hosted-zone ${local.cli_flags}"
