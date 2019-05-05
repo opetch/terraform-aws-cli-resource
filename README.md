@@ -26,7 +26,7 @@ locals {
 }
 
 module "create_vpc_association_authorization" {
-  source = "../../cli_resource"
+  source          = "github.com/opetch/terraform-aws-cli-resource"
 
   account_id      = "123456789" # Account with the private hosted zone
   role            = "TF_Role"
@@ -35,7 +35,7 @@ module "create_vpc_association_authorization" {
 }
 
 module "associate_vpc_with_zone" {
-  source = "../../cli_resource"
+  source          = "github.com/opetch/terraform-aws-cli-resource"
 
   # Uses the default provider account id if no account id is passed in
   role            = "TF_Role"
