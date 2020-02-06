@@ -20,36 +20,12 @@ This module was created initially to combat the issue with the aws provider for 
 
 Use of the CLI circumvents the bug mentioned above and the inclusion of the sts assume role support alleviates some of the pain caused by [Issue 3 (null provider)](https://github.com/terraform-providers/terraform-provider-null/issues/3)
 
-```hcl
-locals {
-  cli_flags = "--hosted-zone-id SOME_HOSTEDZONEID --vpc VPCRegion=eu-west-1,VPCId=vpc-abc123xyz"
-}
+There is a complete example in the [examples/vpc_assoc](examples/vpc_assoc/) folder that demonstrates how to achieve cross account VPC association for Route 53 zones.
 
-module "create_vpc_association_authorization" {
-  source          = "github.com/opetch/terraform-aws-cli-resource"
-
-  account_id      = "123456789" # Account with the private hosted zone
-  role            = "TF_Role"
-  cmd             = "aws route53 create-vpc-association-authorization ${local.cli_flags}"
-  destroy_cmd     = "aws route53 delete-vpc-association-authorization ${local.cli_flags}"
-}
-
-module "associate_vpc_with_zone" {
-  source          = "github.com/opetch/terraform-aws-cli-resource"
-
-  # Uses the default provider account id if no account id is passed in
-  role            = "TF_Role"
-  cmd             = "aws route53 associate-vpc-with-hosted-zone ${local.cli_flags}"
-  destroy_cmd     = "aws route53 disassociate-vpc-from-hosted-zone ${local.cli_flags}"
-
-  # Require that the above resource is created first 
-  dependency_ids  = ["${module.create_vpc_association_authorization.id}"] 
-}
-```
 
 Terraform version
 -----------------
-Terraform version 0.11.3 has been used when creating the module, however many previous versions should work also but have not been tested.
+Terraform version 0.12.14 has been used when creating the module, however many previous versions of 0.12 should work also but have not been tested.
 
 TODO
 ----

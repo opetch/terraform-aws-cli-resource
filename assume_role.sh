@@ -1,6 +1,6 @@
 if [ "$#" -ne 2 ]
 then
-  echo "Usage: source assume_role.sh [account_id] [role]"
+  echo "Usage: source assume_role.sh [role-arn]"
   exit 1
 fi
 
@@ -8,7 +8,7 @@ ACCOUNT="$1"
 ROLE="$2"
 
 role_session_name=`cat /proc/sys/kernel/random/uuid 2>/dev/null || date | cksum | cut -d " " -f 1`
-aws_creds=$(aws sts assume-role --role-arn arn:aws:iam::${ACCOUNT}:role/$ROLE --role-session-name $role_session_name --duration-seconds 3600 --output json)
+aws_creds=$(aws sts assume-role --role-arn $ROLE --role-session-name $role_session_name --duration-seconds 3600 --output json)
 
 if [ "$?" -ne 0 ]
 then
