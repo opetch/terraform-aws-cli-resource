@@ -1,6 +1,8 @@
 AWS CLI Resource Terraform Module
 =================================
 
+_Forked from https://github.com/opetch/terraform-aws-cli-resource and ported to 0.12. PR subitted to original repo on Feb. 6th, 2020_
+
 This module is used to create a AWS resource in terraform by calling out to the CLI, with support for cross account resource creation (see example). The module encapsulates the act of assuming a role, when required to create the resource in the specified account. 
 
 Use Cases
