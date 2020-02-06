@@ -2,12 +2,8 @@ terraform {
   required_version = ">= 0.12"
 }
 
-data "aws_caller_identity" "id" {
-}
-
 locals {
-  account_id      = var.account_id == null ? data.aws_caller_identity.id.account_id : var.account_id
-  assume_role_cmd = "source ${path.module}/assume_role.sh ${local.account_id} ${var.role_arn}"
+  assume_role_cmd = "source ${path.module}/assume_role.sh ${var.role_arn}"
 }
 
 resource "null_resource" "cli_resource" {

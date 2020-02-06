@@ -29,6 +29,10 @@ resource "aws_route53_zone" "this" {
   vpc {
     vpc_id = data.aws_vpc.owner.id
   }
+
+  lifecycle {
+    ignore_changes = [vpc]
+  }
 }
 
 resource "aws_route53_record" "www" {
