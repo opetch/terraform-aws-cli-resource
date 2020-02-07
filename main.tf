@@ -3,7 +3,7 @@ terraform {
 }
 
 locals {
-  assume_role_cmd = "source ${path.module}/assume_role.sh ${var.role_arn}"
+  assume_role_cmd = var.role_arn == null ? "" : "source ${path.module}/assume_role.sh ${var.role_arn}"
 }
 
 resource "null_resource" "cli_resource" {
