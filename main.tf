@@ -46,7 +46,7 @@ resource "null_resource" "cli_resource" {
 }
 
 resource "null_resource" "dependencies" {
-  triggers {
+  triggers = {
     dependencies = "${join(",", var.dependency_ids)}"
   }
 }
