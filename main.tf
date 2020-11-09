@@ -30,20 +30,26 @@ locals {
   assume_role_cmd = "source ${path.module}/assume_role.sh ${local.account_id} ${var.role}"
 }
 
+
 resource "null_resource" "cli_resource" {
   provisioner "local-exec" {
     when    = create
-    command = "/bin/bash -c '${var.role == 0 ? "" : "${local.assume_role_cmd} && "}${var.cmd}'"
+    command = "/bin/bash -c '${self.triggers.createCmd}'"
   }
 
   provisioner "local-exec" {
     when    = destroy
-    command = "/bin/bash -c '${var.role == 0 ? "" : "${local.assume_role_cmd} && "}${var.destroy_cmd}'"
+    command = "/bin/bash -c '${self.triggers.destroyCmd}'"
   }
 
-  # By depending on the null_resource, the cli resource effectively depends on the existance
-  # of the resources identified by the ids provided via the dependency_ids list variable.
-  depends_on = [null_resource.dependencies]
+  triggers = {
+    # By depending on the null_resource, the cli resource effectively depends on the existance
+    # of the resources identified by the ids provided via the dependency_ids list variable.
+    depends_on = [null_resource.dependencies]
+    destroyCmd = "${var.role == 0 ? "" : "${local.assume_role_cmd} && "}${var.destroy_cmd}"
+    createCmd  = "${var.role == 0 ? "" : "${local.assume_role_cmd} && "}${var.cmd}"
+  }
+
 }
 
 resource "null_resource" "dependencies" {
