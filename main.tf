@@ -1,19 +1,24 @@
 variable "cmd" {
+  type        = string
   description = "The command used to create the resource."
 }
 
 variable "destroy_cmd" {
+  type        = string
   description = "The command used to destroy the resource."
+  default     = "true"
 }
 
 variable "account_id" {
+  type        = string
   description = "The account that holds the role to assume in. Will use providers account by default"
-  default     = "0"
+  default     = ""
 }
 
 variable "role" {
+  type        = string
   description = "The role to assume in order to run the cli command."
-  default     = "0"
+  default     = ""
 }
 
 variable "dependency_ids" {
@@ -25,7 +30,7 @@ variable "dependency_ids" {
 data "aws_caller_identity" "id" {}
 
 locals {
-  account_id      = var.account_id == 0 ? data.aws_caller_identity.id.account_id : var.account_id
+  account_id      = var.account_id == "" ? data.aws_caller_identity.id.account_id : var.account_id
   assume_role_cmd = "source ${path.module}/assume_role.sh ${local.account_id} ${var.role}"
 }
 
@@ -37,13 +42,13 @@ resource "null_resource" "cli_resource" {
     assume_role_cmd = local.assume_role_cmd
   }
   provisioner "local-exec" {
-    when    = "create"
-    command = "/bin/bash -c '${self.triggers.role == 0 ? "" : "${self.triggers.assume_role_cmd} && "}${self.triggers.cmd}'"
+    when    = create
+    command = "/bin/bash -c '${self.triggers.role == "" ? "" : "${self.triggers.assume_role_cmd} && "}${self.triggers.cmd == "" ? "true" : self.triggers.cmd}'"
   }
 
   provisioner "local-exec" {
-    when    = "destroy"
-    command = "/bin/bash -c '${self.triggers.role == 0 ? "" : "${self.triggers.assume_role_cmd} && "}${self.triggers.destroy_cmd}'"
+    when    = destroy
+    command = "/bin/bash -c '${self.triggers.role == "" ? "" : "${self.triggers.assume_role_cmd} && "}${self.triggers.destroy_cmd == "" ? "true" : self.triggers.destroy_cmd}'"
   }
 
   # By depending on the null_resource, the cli resource effectively depends on the existance
